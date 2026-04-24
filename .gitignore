@@ -1,0 +1,10 @@
+/build/
+/.vs/
+/.vscode/
+*.user
+*.suo
+*.pdb
+*.ilk
+*.obj
+*.vcxproj.user
+CMakeUserPresets.json
