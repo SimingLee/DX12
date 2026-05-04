@@ -30,12 +30,18 @@ void InputSystem::HandleMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
         }
         break;
     case WM_LBUTTONDOWN:
+        mousePosition_.x = static_cast<float>(GET_X_LPARAM(lParam));
+        mousePosition_.y = static_cast<float>(GET_Y_LPARAM(lParam));
         currentMouseButtons_[0] = true;
         break;
     case WM_LBUTTONUP:
+        mousePosition_.x = static_cast<float>(GET_X_LPARAM(lParam));
+        mousePosition_.y = static_cast<float>(GET_Y_LPARAM(lParam));
         currentMouseButtons_[0] = false;
         break;
     case WM_RBUTTONDOWN:
+        mousePosition_.x = static_cast<float>(GET_X_LPARAM(lParam));
+        mousePosition_.y = static_cast<float>(GET_Y_LPARAM(lParam));
         currentMouseButtons_[1] = true;
         if (!mouseCaptured_)
         {
@@ -43,6 +49,8 @@ void InputSystem::HandleMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
         }
         break;
     case WM_RBUTTONUP:
+        mousePosition_.x = static_cast<float>(GET_X_LPARAM(lParam));
+        mousePosition_.y = static_cast<float>(GET_Y_LPARAM(lParam));
         currentMouseButtons_[1] = false;
         if (!forcedCapture_)
         {
@@ -50,12 +58,18 @@ void InputSystem::HandleMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
         }
         break;
     case WM_MBUTTONDOWN:
+        mousePosition_.x = static_cast<float>(GET_X_LPARAM(lParam));
+        mousePosition_.y = static_cast<float>(GET_Y_LPARAM(lParam));
         currentMouseButtons_[2] = true;
         break;
     case WM_MBUTTONUP:
+        mousePosition_.x = static_cast<float>(GET_X_LPARAM(lParam));
+        mousePosition_.y = static_cast<float>(GET_Y_LPARAM(lParam));
         currentMouseButtons_[2] = false;
         break;
     case WM_MOUSEMOVE:
+        mousePosition_.x = static_cast<float>(GET_X_LPARAM(lParam));
+        mousePosition_.y = static_cast<float>(GET_Y_LPARAM(lParam));
         if (mouseCaptured_)
         {
             if (ignoreNextMouseMove_)
@@ -101,9 +115,19 @@ bool InputSystem::IsMouseButtonDown(uint32_t button) const
     return button < currentMouseButtons_.size() ? currentMouseButtons_[button] : false;
 }
 
+bool InputSystem::WasMouseButtonPressed(uint32_t button) const
+{
+    return button < currentMouseButtons_.size() ? currentMouseButtons_[button] && !previousMouseButtons_[button] : false;
+}
+
 MouseDelta InputSystem::GetMouseDelta() const
 {
     return mouseDelta_;
+}
+
+MousePosition InputSystem::GetMousePosition() const
+{
+    return mousePosition_;
 }
 
 void InputSystem::ReleaseMouseCapture(HWND hwnd)
@@ -172,5 +196,6 @@ void InputSystem::ClearState()
     currentMouseButtons_.fill(false);
     previousMouseButtons_.fill(false);
     mouseDelta_ = {};
+    mousePosition_ = {};
 }
 } // namespace engine

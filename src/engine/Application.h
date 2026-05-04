@@ -20,13 +20,26 @@ public:
     int Run();
     void Shutdown();
 
-private:
     enum class AppMode
     {
         Edit,
         Play
     };
 
+    enum class GizmoOperation
+    {
+        Translate,
+        Rotate,
+        Scale
+    };
+
+    enum class GizmoMode
+    {
+        Local,
+        World
+    };
+
+private:
     std::optional<Window::MessageResult> OnWindowMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
     void OnResize(uint32_t width, uint32_t height, bool minimized);
     void Update(float deltaTime);
@@ -34,9 +47,15 @@ private:
     bool InitializeImGui();
     void ShutdownImGui();
     void BuildEditorUi();
+    void BuildScenePanel();
+    void BuildInspectorPanel();
+    void UpdateEditorPicking();
+    void DrawTransformGizmo();
+    void DrawLightGizmos();
     void TogglePlayMode(bool enabled);
     void LoadExternalModel();
     void LoadExternalTexture();
+    void ImportUnrealLevelJson();
 
     Window window_{};
     InputSystem input_{};
@@ -53,6 +72,10 @@ private:
     DirectX::XMFLOAT3 savedEditCameraPosition_{};
     float savedEditCameraYaw_ = 0.0f;
     float savedEditCameraPitch_ = 0.0f;
+    float playCameraYaw_ = 0.0f;
+    float playCameraPitch_ = 0.22f;
+    GizmoOperation gizmoOperation_ = GizmoOperation::Translate;
+    GizmoMode gizmoMode_ = GizmoMode::Local;
     float fpsAccumulatedTime_ = 0.0f;
     uint32_t fpsFrameCount_ = 0;
 };
