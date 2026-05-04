@@ -12,6 +12,12 @@ struct MouseDelta
     float y = 0.0f;
 };
 
+struct MousePosition
+{
+    float x = 0.0f;
+    float y = 0.0f;
+};
+
 class InputSystem
 {
 public:
@@ -21,7 +27,9 @@ public:
     bool IsKeyDown(uint32_t key) const;
     bool WasKeyPressed(uint32_t key) const;
     bool IsMouseButtonDown(uint32_t button) const;
+    bool WasMouseButtonPressed(uint32_t button) const;
     MouseDelta GetMouseDelta() const;
+    MousePosition GetMousePosition() const;
 
     bool IsMouseCaptured() const { return mouseCaptured_; }
     void CaptureMouse(HWND hwnd, bool forced = true);
@@ -37,6 +45,7 @@ private:
     std::array<bool, 3> currentMouseButtons_{};
     std::array<bool, 3> previousMouseButtons_{};
     MouseDelta mouseDelta_{};
+    MousePosition mousePosition_{};
     bool mouseCaptured_ = false;
     bool forcedCapture_ = false;
     bool ignoreNextMouseMove_ = false;

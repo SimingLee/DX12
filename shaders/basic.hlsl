@@ -7,6 +7,7 @@ cbuffer SceneConstants : register(b0)
     float _padding0;
     float3 lightDir;
     float _padding1;
+    float4 tint;
 };
 
 Texture2D diffuseTexture : register(t0);
@@ -47,5 +48,6 @@ float4 PSMain(PSInput input) : SV_TARGET
     float diffuse = saturate(dot(n, l));
     float3 ambient = 0.18f.xxx;
     float3 color = albedo * (ambient + diffuse);
+    color = lerp(color, color * tint.rgb + tint.rgb * 0.25f, tint.a);
     return float4(color, 1.0f);
 }
